@@ -1,0 +1,10 @@
+# Python
+api/venv/
+api/__pycache__/
+api/*.pyc
+api/model/
+
+# Node
+AI/node_modules/
+AI/dist/
+AI/.angular/
