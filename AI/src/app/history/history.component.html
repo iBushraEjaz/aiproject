@@ -1,0 +1,207 @@
+<div class="history-page">
+
+  <!-- ===== HEADER ===== -->
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-badge"><i class="bi bi-clock-history"></i> Analysis History</div>
+      <h1>Your <span>Analysis History</span></h1>
+      <p>Complete log of all website analyses performed on SEOGEN AI.</p>
+    </div>
+    <button class="btn-clear-all" (click)="clearHistory()" *ngIf="totalCount() > 0">
+      <i class="bi bi-trash3-fill"></i> Clear All
+    </button>
+  </div>
+
+  <!-- ===== SUMMARY STATS ===== -->
+  <div class="summary-row">
+    <div class="summary-card s-blue">
+      <div class="sc-icon"><i class="bi bi-globe2"></i></div>
+      <div class="sc-info">
+        <span class="sc-val">{{ totalCount() }}</span>
+        <span class="sc-lbl">Total Analyzed</span>
+      </div>
+    </div>
+    <div class="summary-card s-green">
+      <div class="sc-icon"><i class="bi bi-shield-fill-check"></i></div>
+      <div class="sc-info">
+        <span class="sc-val">{{ realCount() }}</span>
+        <span class="sc-lbl">Real Sites</span>
+      </div>
+    </div>
+    <div class="summary-card s-amber">
+      <div class="sc-icon"><i class="bi bi-shield-fill-exclamation"></i></div>
+      <div class="sc-info">
+        <span class="sc-val">{{ mixedCount() }}</span>
+        <span class="sc-lbl">Mixed Sites</span>
+      </div>
+    </div>
+    <div class="summary-card s-red">
+      <div class="sc-icon"><i class="bi bi-shield-fill-x"></i></div>
+      <div class="sc-info">
+        <span class="sc-val">{{ propagandaCount() }}</span>
+        <span class="sc-lbl">Propaganda Sites</span>
+      </div>
+    </div>
+    <div class="summary-card s-cyan">
+      <div class="sc-icon"><i class="bi bi-star-fill"></i></div>
+      <div class="sc-info">
+        <span class="sc-val">{{ avgTrust() }}%</span>
+        <span class="sc-lbl">Avg. Trust Score</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FILTERS BAR ===== -->
+  <div class="filters-bar">
+
+    <!-- Search -->
+    <div class="search-wrap">
+      <i class="bi bi-search search-ico"></i>
+      <input
+        type="text"
+        placeholder="Search by URL..."
+        class="search-input"
+        [value]="searchQuery()"
+        (input)="onSearch($any($event.target).value)"
+      />
+    </div>
+
+    <!-- Status Filter Tabs -->
+    <div class="filter-tabs">
+      <button
+        *ngFor="let s of statusOptions"
+        class="ftab"
+        [class.active]="filterStatus() === s"
+        (click)="onFilterStatus(s)"
+      >{{ s }}</button>
+    </div>
+
+    <!-- Sort -->
+    <select class="sort-select" (change)="onSort($any($event.target).value)">
+      <option *ngFor="let o of sortOptions" [value]="o.value">{{ o.label }}</option>
+    </select>
+
+  </div>
+
+  <!-- ===== EMPTY STATE ===== -->
+  <div class="empty-state" *ngIf="filtered().length === 0">
+    <div class="empty-icon"><i class="bi bi-clock-history"></i></div>
+    <h3>{{ allHistory().length === 0 ? 'No history yet' : 'No results found' }}</h3>
+    <p>{{ allHistory().length === 0 ? 'Start analyzing websites to build your history.' : 'Try changing your search or filter.' }}</p>
+  </div>
+
+  <!-- ===== HISTORY TABLE ===== -->
+  <div class="history-table-wrap" *ngIf="filtered().length > 0">
+    <table class="history-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Website URL</th>
+          <th>Real %</th>
+          <th>Propaganda %</th>
+          <th>Trust Score</th>
+          <th>Domain Auth.</th>
+          <th>Backlinks</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of paginated(); let i = index"
+            class="history-row"
+            [class.row-real]="item.status === 'Real'"
+            [class.row-prop]="item.status === 'Propaganda'"
+            [class.row-mixed]="item.status === 'Mixed'">
+
+          <!-- Index -->
+          <td class="idx-cell">
+            {{ (currentPage() - 1) * itemsPerPage + i + 1 }}
+          </td>
+
+          <!-- URL -->
+          <td class="url-td">
+            <div class="url-cell">
+              <div class="url-favicon"><i class="bi bi-globe2"></i></div>
+              <div class="url-info">
+                <span class="url-text">{{ item.url }}</span>
+              </div>
+            </div>
+          </td>
+
+          <!-- Real % -->
+          <td>
+            <div class="score-cell">
+              <div class="mini-bar-wrap">
+                <div class="mini-bar green-fill" [style.width.%]="item.realPercent"></div>
+              </div>
+              <span class="score-num green-num">{{ item.realPercent }}%</span>
+            </div>
+          </td>
+
+          <!-- Propaganda % -->
+          <td>
+            <div class="score-cell">
+              <div class="mini-bar-wrap">
+                <div class="mini-bar red-fill" [style.width.%]="item.propagandaPercent"></div>
+              </div>
+              <span class="score-num red-num">{{ item.propagandaPercent }}%</span>
+            </div>
+          </td>
+
+          <!-- Trust Score -->
+          <td>
+            <span class="trust-chip" [style.color]="getTrustColor(item.trustScore)"
+              [style.background]="'rgba(' + (item.trustScore >= 70 ? '34,197,94' : item.trustScore >= 40 ? '245,158,11' : '239,68,68') + ',0.1)'">
+              {{ item.trustScore }}%
+            </span>
+          </td>
+
+          <!-- Domain Authority 
+          <td>
+            <span class="domain-val">{{ item.domainAuthority ?? '—' }}%</span>
+          </td> -->
+
+          <!-- Backlinks -->
+          <td>
+            <span class="backlink-val">{{ item.backlinkCount | number }}</span>
+          </td>
+
+          <!-- Status -->
+          <td>
+            <span class="status-tag" [class]="getStatusClass(item.status)">
+              <i class="bi" [class]="getStatusIcon(item.status)"></i>
+              {{ item.status }}
+            </span>
+          </td>
+
+          <!-- Date -->
+          <td class="date-td">{{ item.date }}</td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== PAGINATION ===== -->
+  <div class="pagination" *ngIf="totalPages() > 1">
+    <button class="pg-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+
+    <button
+      *ngFor="let p of pageNumbers()"
+      class="pg-btn"
+      [class.pg-active]="p === currentPage()"
+      (click)="goToPage(p)"
+    >{{ p }}</button>
+
+    <button class="pg-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+
+    <span class="pg-info">
+      Page {{ currentPage() }} of {{ totalPages() }} &nbsp;·&nbsp; {{ filtered().length }} results
+    </span>
+  </div>
+
+</div>

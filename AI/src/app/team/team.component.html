@@ -1,0 +1,174 @@
+<div class="team-page">
+
+  <!-- ===== PAGE HEADER ===== -->
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-badge"><i class="bi bi-people-fill"></i> Our Team</div>
+      <h1>Meet the <span>SEOGEN AI</span> Team</h1>
+      <p>The passionate minds behind the backlink analysis and propaganda detection platform.</p>
+    </div>
+    <div class="header-stats">
+      <div class="hstat"><span>4</span><small>Members</small></div>
+      <div class="hstat-divider"></div>
+      <div class="hstat"><span>1</span><small>Supervisor</small></div>
+      <div class="hstat-divider"></div>
+      <div class="hstat"><span>3</span><small>Developers</small></div>
+    </div>
+  </div>
+
+  <!-- ===== SUPERVISOR SECTION ===== -->
+  <div class="section-label">
+    <div class="section-line"></div>
+    <span><i class="bi bi-award-fill"></i> Project Supervisor</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="supervisor-wrapper">
+    <div class="supervisor-card">
+
+      <!-- Decorative orbs -->
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="grid-overlay"></div>
+
+      <!-- Photo side -->
+      <div class="sup-photo-col">
+        <div class="sup-avatar-ring">
+          <div class="sup-avatar">
+            <img
+              [src]="supervisor.image"
+              [alt]="supervisor.name"
+              class="sup-img"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"
+            />
+            <div class="fallback-icon" style="display:none">
+              <i class="bi bi-person-fill"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="sup-role-badge">
+          <i class="bi bi-shield-fill-check"></i>
+          {{ supervisor.badge }}
+        </div>
+
+        <div class="sup-socials">
+          <a *ngIf="supervisor.social.linkedin" [href]="supervisor.social.linkedin"
+             class="soc-btn" title="LinkedIn">
+            <i class="bi bi-linkedin"></i>
+          </a>
+          <a *ngIf="supervisor.social.email" [href]="'mailto:' + supervisor.social.email"
+             class="soc-btn" title="Email">
+            <i class="bi bi-envelope-fill"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Info side -->
+      <div class="sup-info-col">
+        <div class="sup-label">Project Supervisor</div>
+        <h2 class="sup-name">{{ supervisor.name }}</h2>
+        <p class="sup-role-text">{{ supervisor.role }}</p>
+        <p class="sup-desc">{{ supervisor.description }}</p>
+
+        <div class="skills-block">
+          <p class="skills-title"><i class="bi bi-lightning-charge-fill"></i> Expertise</p>
+          <div class="skills-list">
+            <span class="skill-pill sup-skill" *ngFor="let s of supervisor.skills">
+              {{ s }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== TEAM MEMBERS ===== -->
+  <div class="section-label" style="margin-top:32px">
+    <div class="section-line"></div>
+    <span><i class="bi bi-people-fill"></i> Team Members</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="members-grid">
+    <div
+      class="member-card"
+      *ngFor="let m of members; let i = index"
+      [style.--glow]="m.glowColor"
+    >
+      <!-- Animated top bar -->
+      <div class="card-top-bar" [style.background]="m.badgeColor"></div>
+
+      <!-- Card inner dark bg -->
+      <div class="card-inner" [style.background]="m.cardColor">
+
+        <!-- Decorative circles -->
+        <div class="card-orb card-orb-1"></div>
+        <div class="card-orb card-orb-2"></div>
+
+        <!-- Photo -->
+        <div class="member-photo-wrap">
+          <div class="member-avatar-ring">
+            <div class="member-avatar">
+              <img
+                [src]="m.image"
+                [alt]="m.name"
+                class="member-img"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"
+              />
+              <div class="fallback-icon member-fallback" style="display:none">
+                <i class="bi bi-person-fill"></i>
+              </div>
+            </div>
+          </div>
+          <div class="member-badge" [style.background]="m.badgeColor">
+            {{ m.badge }}
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="member-info">
+          <h3 class="member-name">{{ m.name }}</h3>
+          <p class="member-role">{{ m.role }}</p>
+          <p class="member-desc">{{ m.description }}</p>
+
+          <div class="member-skills">
+            <span class="skill-pill mem-skill" *ngFor="let s of m.skills">{{ s }}</span>
+          </div>
+        </div>
+
+        <!-- Socials -->
+        <div class="member-socials">
+          <a *ngIf="m.social.github" [href]="m.social.github" class="soc-btn soc-dark" title="GitHub">
+            <i class="bi bi-github"></i>
+          </a>
+          <a *ngIf="m.social.linkedin" [href]="m.social.linkedin" class="soc-btn soc-dark" title="LinkedIn">
+            <i class="bi bi-linkedin"></i>
+          </a>
+          <a *ngIf="m.social.email" [href]="'mailto:' + m.social.email" class="soc-btn soc-dark" title="Email">
+            <i class="bi bi-envelope-fill"></i>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PROJECT INFO STRIP ===== -->
+  <div class="project-strip">
+    <div class="strip-inner">
+      <div class="strip-icon"><i class="bi bi-shield-check"></i></div>
+      <div class="strip-text">
+        <h4>SEOGEN AI — Final Year Project</h4>
+        <p>Backlink Analysis & Propaganda Detection Platform built with Angular, C# ASP.NET & AI/ML</p>
+      </div>
+      <div class="strip-badges">
+        <span class="s-badge"><i class="bi bi-braces"></i> Angular</span>
+        <span class="s-badge"><i class="bi bi-code-slash"></i> C# ASP.NET</span>
+        <span class="s-badge"><i class="bi bi-robot"></i> AI / ML</span>
+      </div>
+    </div>
+  </div>
+
+</div>

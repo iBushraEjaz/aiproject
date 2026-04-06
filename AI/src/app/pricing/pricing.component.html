@@ -1,0 +1,85 @@
+<div class="pricing-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-badge"><i class="bi bi-tag-fill"></i> Pricing</div>
+    <h1>Simple, <span>Transparent Pricing</span></h1>
+    <p>Choose the plan that works for your propaganda detection needs. No hidden fees.</p>
+  </div>
+
+  <!-- Plans -->
+  <div class="plans-grid">
+
+    <!-- Free -->
+    <div class="plan-card">
+      <div class="plan-name free-name">Free</div>
+      <div class="plan-price">$0<span>/month</span></div>
+      <p class="plan-desc">Perfect for personal use and trying out the platform.</p>
+      <ul class="plan-features">
+        <li><i class="bi bi-check-circle-fill green"></i> 10 analyses per day</li>
+        <li><i class="bi bi-check-circle-fill green"></i> Text & URL input</li>
+        <li><i class="bi bi-check-circle-fill green"></i> Basic confidence scores</li>
+        <li><i class="bi bi-check-circle-fill green"></i> Analysis history</li>
+        <li><i class="bi bi-x-circle-fill grey"></i> Batch analysis</li>
+        <li><i class="bi bi-x-circle-fill grey"></i> REST API access</li>
+        <li><i class="bi bi-x-circle-fill grey"></i> Priority support</li>
+      </ul>
+      <a routerLink="/analyzer" class="btn-plan">Get Started Free</a>
+    </div>
+
+    <!-- Pro -->
+    <div class="plan-card plan-featured">
+      <div class="popular-badge">⭐ Most Popular</div>
+      <div class="plan-name pro-name">Pro</div>
+      <div class="plan-price">$29<span>/month</span></div>
+      <p class="plan-desc">For researchers, journalists and fact-checkers.</p>
+      <ul class="plan-features">
+        <li><i class="bi bi-check-circle-fill green"></i> Unlimited analyses</li>
+        <li><i class="bi bi-check-circle-fill green"></i> Text & URL input</li>
+        <li><i class="bi bi-check-circle-fill green"></i> Full probability breakdown</li>
+        <li><i class="bi bi-check-circle-fill green"></i> Analysis history & reports</li>
+        <li><i class="bi bi-check-circle-fill green"></i> Batch analysis (64/request)</li>
+        <li><i class="bi bi-check-circle-fill green"></i> REST API access</li>
+        <li><i class="bi bi-x-circle-fill grey"></i> Priority support</li>
+      </ul>
+      <a routerLink="/analyzer" class="btn-plan btn-pro">Start Free Trial</a>
+    </div>
+
+    <!-- Enterprise -->
+    <div class="plan-card">
+      <div class="plan-name ent-name">Enterprise</div>
+      <div class="plan-price">Custom</div>
+      <p class="plan-desc">For organizations that need scale and control.</p>
+      <ul class="plan-features">
+        <li><i class="bi bi-check-circle-fill green"></i> Everything in Pro</li>
+        <li><i class="bi bi-check-circle-fill green"></i> Custom model fine-tuning</li>
+        <li><i class="bi bi-check-circle-fill green"></i> On-premise deployment</li>
+        <li><i class="bi bi-check-circle-fill green"></i> Dedicated infrastructure</li>
+        <li><i class="bi bi-check-circle-fill green"></i> SLA guarantee</li>
+        <li><i class="bi bi-check-circle-fill green"></i> Priority 24/7 support</li>
+        <li><i class="bi bi-check-circle-fill green"></i> Custom integrations</li>
+      </ul>
+      <a routerLink="/team" class="btn-plan">Contact Us</a>
+    </div>
+
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <div class="section-label">
+      <div class="sl-line"></div>
+      <span><i class="bi bi-question-circle-fill"></i> Frequently Asked Questions</span>
+      <div class="sl-line"></div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item" *ngFor="let f of faq" [class.open]="f.open" (click)="toggle(f)">
+        <div class="faq-q">
+          {{ f.q }}
+          <i class="bi" [class]="f.open ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+        </div>
+        <div class="faq-a" *ngIf="f.open">{{ f.a }}</div>
+      </div>
+    </div>
+  </div>
+
+</div>

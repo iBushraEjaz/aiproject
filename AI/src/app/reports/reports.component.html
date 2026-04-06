@@ -1,0 +1,186 @@
+<div class="reports-page">
+
+  <!-- ===== HEADER ===== -->
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-badge"><i class="bi bi-bar-chart-fill"></i> Reports</div>
+      <h1>Analysis <span>Reports</span></h1>
+      <p>Complete statistical breakdown of all your propaganda detection analyses.</p>
+    </div>
+    <div class="header-actions" *ngIf="history.length > 0">
+      <button class="btn-print" (click)="printReport()">
+        <i class="bi bi-printer-fill"></i> Print Report
+      </button>
+      <button class="btn-clear" (click)="clearAll()">
+        <i class="bi bi-trash3-fill"></i> Clear All
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== SUMMARY CARDS ===== -->
+  <div class="summary-grid">
+    <div class="sum-card">
+      <div class="sum-icon sc-blue"><i class="bi bi-globe2"></i></div>
+      <div>
+        <div class="sum-val">{{ totalAnalyzed }}</div>
+        <div class="sum-lbl">Total Analyzed</div>
+      </div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon sc-green"><i class="bi bi-shield-fill-check"></i></div>
+      <div>
+        <div class="sum-val">{{ realCount }}</div>
+        <div class="sum-lbl">Real Content</div>
+      </div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon sc-red"><i class="bi bi-shield-fill-x"></i></div>
+      <div>
+        <div class="sum-val">{{ propagandaCount }}</div>
+        <div class="sum-lbl">Propaganda</div>
+      </div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon sc-amber"><i class="bi bi-shield-fill-exclamation"></i></div>
+      <div>
+        <div class="sum-val">{{ mixedCount }}</div>
+        <div class="sum-lbl">Mixed Signals</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHARTS (only if data exists) ===== -->
+  <ng-container *ngIf="history.length > 0">
+    <div class="chart-section">
+
+      <!-- Status Breakdown -->
+      <div class="chart-card">
+        <div class="chart-title"><i class="bi bi-pie-chart-fill"></i> Status Breakdown</div>
+        <div class="breakdown-bar">
+          <div class="bar-seg seg-real" [style.width.%]="realPercent"></div>
+          <div class="bar-seg seg-prop" [style.width.%]="propPercent"></div>
+          <div class="bar-seg seg-mixed" [style.width.%]="mixedPercent"></div>
+        </div>
+        <div class="breakdown-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#22c55e"></div>
+            <span class="legend-label">Real</span>
+            <span class="legend-val">{{ realCount }}</span>
+            <span class="legend-pct">{{ realPercent }}%</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#ef4444"></div>
+            <span class="legend-label">Propaganda</span>
+            <span class="legend-val">{{ propagandaCount }}</span>
+            <span class="legend-pct">{{ propPercent }}%</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#f59e0b"></div>
+            <span class="legend-label">Mixed</span>
+            <span class="legend-val">{{ mixedCount }}</span>
+            <span class="legend-pct">{{ mixedPercent }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Average Scores -->
+      <div class="chart-card">
+        <div class="chart-title"><i class="bi bi-speedometer2"></i> Average Scores</div>
+        <div class="avg-bar-row">
+          <div class="avg-item">
+            <div class="avg-label-row">
+              <span class="avg-label">Avg. Real Score</span>
+              <span class="avg-val">{{ avgReal }}%</span>
+            </div>
+            <div class="avg-track"><div class="avg-fill fill-green" [style.width.%]="avgReal"></div></div>
+          </div>
+          <div class="avg-item">
+            <div class="avg-label-row">
+              <span class="avg-label">Avg. Propaganda Score</span>
+              <span class="avg-val">{{ avgPropaganda }}%</span>
+            </div>
+            <div class="avg-track"><div class="avg-fill fill-red" [style.width.%]="avgPropaganda"></div></div>
+          </div>
+          <div class="avg-item">
+            <div class="avg-label-row">
+              <span class="avg-label">Avg. Trust Score</span>
+              <span class="avg-val">{{ avgTrust }}%</span>
+            </div>
+            <div class="avg-track"><div class="avg-fill fill-amber" [style.width.%]="avgTrust"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===== TABLE ===== -->
+    <div class="table-section">
+      <div class="table-header">
+        <div class="table-title"><i class="bi bi-table"></i> All Analyses</div>
+        <span class="table-count">{{ history.length }} records</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Content</th>
+              <th>Real %</th>
+              <th>Propaganda %</th>
+              <th>AI Confidence</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of history; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>
+                <div class="url-cell">
+                  <div class="url-favicon"><i class="bi bi-file-text"></i></div>
+                  <span class="url-text">{{ item.url || item.text.substring(0, 50) || '—' }}</span>
+                </div>
+              </td>
+              <td>
+                <div class="score-cell">
+                  <div class="mini-bar"><div class="mini-fill mf-green" [style.width.%]="item.realPercent"></div></div>
+                  <span class="score-num sn-green">{{ item.realPercent }}%</span>
+                </div>
+              </td>
+              <td>
+                <div class="score-cell">
+                  <div class="mini-bar"><div class="mini-fill mf-red" [style.width.%]="item.propagandaPercent"></div></div>
+                  <span class="score-num sn-red">{{ item.propagandaPercent }}%</span>
+                </div>
+              </td>
+              <td>
+                <span class="trust-chip"
+                  [style.color]="item.confidence >= 70 ? '#16a34a' : item.confidence >= 40 ? '#d97706' : '#dc2626'"
+                  [style.background]="item.confidence >= 70 ? 'rgba(34,197,94,0.1)' : item.confidence >= 40 ? 'rgba(245,158,11,0.1)' : 'rgba(239,68,68,0.1)'">
+                  {{ item.confidence }}%
+                </span>
+              </td>
+              <td>
+                <span class="status-tag" [class]="getStatusClass(item.status)">
+                  {{ item.status }}
+                </span>
+              </td>
+              <td class="date-td">{{ item.date }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- ===== EMPTY STATE ===== -->
+  <div class="empty-state" *ngIf="history.length === 0">
+    <div class="empty-icon"><i class="bi bi-bar-chart"></i></div>
+    <h3>No analyses yet</h3>
+    <p>Start analyzing content to generate your first report.</p>
+    <a routerLink="/analyzer" class="btn-go">
+      <i class="bi bi-search"></i> Go to Analyzer
+    </a>
+  </div>
+
+</div>

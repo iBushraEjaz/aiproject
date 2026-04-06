@@ -1,0 +1,105 @@
+<div class="settings-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-badge"><i class="bi bi-gear-fill"></i> Settings</div>
+    <h1>Account <span>Settings</span></h1>
+    <p>Manage your profile, API configuration and preferences.</p>
+  </div>
+
+  <!-- Profile -->
+  <div class="settings-section">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(59,130,246,0.1); color:#3b82f6">
+        <i class="bi bi-person-fill"></i>
+      </div>
+      <h3>Profile</h3>
+    </div>
+    <div class="section-body">
+      <div class="profile-display">
+        <div class="profile-avatar"><i class="bi bi-person-fill"></i></div>
+        <div>
+          <div class="profile-name">{{ user.name || 'User' }}</div>
+          <div class="profile-email">{{ user.email }}</div>
+          <div class="profile-badge"><i class="bi bi-shield-fill-check"></i> Verified Account</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- API Configuration -->
+  <div class="settings-section">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(139,92,246,0.1); color:#8b5cf6">
+        <i class="bi bi-cpu-fill"></i>
+      </div>
+      <h3>API Configuration</h3>
+    </div>
+    <div class="section-body">
+      <div class="form-group">
+        <label class="form-label">Backend API URL</label>
+        <div class="form-row">
+          <input class="form-input" type="text" [(ngModel)]="apiUrl" placeholder="http://localhost:8000" />
+          <button class="btn-save" (click)="saveApiUrl()">Save</button>
+        </div>
+        <div class="form-hint">The URL of your FastAPI propaganda detection backend.</div>
+      </div>
+      <div *ngIf="savedMsg" class="save-msg">
+        <i class="bi bi-check-circle-fill"></i> {{ savedMsg }}
+      </div>
+    </div>
+  </div>
+
+  <!-- History & Data -->
+  <div class="settings-section">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(245,158,11,0.1); color:#f59e0b">
+        <i class="bi bi-clock-history"></i>
+      </div>
+      <h3>Data & History</h3>
+    </div>
+    <div class="section-body">
+      <div class="history-stat">
+        <span class="hs-label">Analysis records stored</span>
+        <span class="hs-val">{{ historyCount }}</span>
+      </div>
+      <div class="history-stat">
+        <span class="hs-label">Storage location</span>
+        <span class="hs-val" style="font-size:13px; color:#64748b">Browser localStorage</span>
+      </div>
+      <div class="history-stat" *ngIf="!cleared">
+        <span class="hs-label">Clear all saved analyses</span>
+        <button class="btn-danger" (click)="clearHistory()" *ngIf="historyCount > 0">
+          <i class="bi bi-trash3-fill"></i> Clear History
+        </button>
+        <span style="font-size:13px; color:#94a3b8" *ngIf="historyCount === 0">Nothing to clear</span>
+      </div>
+      <div class="history-stat" *ngIf="cleared">
+        <span class="hs-label">Clear all saved analyses</span>
+        <span class="cleared-msg"><i class="bi bi-check-circle-fill"></i> History cleared</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Danger Zone -->
+  <div class="settings-section danger-section">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(239,68,68,0.1); color:#ef4444">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+      </div>
+      <h3>Danger Zone</h3>
+    </div>
+    <div class="section-body">
+      <div class="danger-row">
+        <div class="danger-info">
+          <strong>Sign out of SEOGEN AI</strong>
+          <p>You will be redirected to the login page.</p>
+        </div>
+        <button class="btn-danger logout-btn" (click)="logout()">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,75 @@
+<!-- Navbar — only shown when logged in AND not on auth pages -->
+<nav class="main-nav" *ngIf="showNav">
+  <div class="nav-inner">
+
+    <!-- Logo -->
+    <a routerLink="/dashboard" class="nav-logo">
+      <div class="logo-icon">
+        <i class="bi bi-shield-fill-check"></i>
+      </div>
+      <span class="logo-text">SEOGEN<span class="logo-accent">AI</span></span>
+    </a>
+
+    <!-- Nav Links -->
+    <ul class="nav-links">
+      <li>
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+          <i class="bi bi-house-fill"></i> Home
+        </a>
+      </li>
+      <li>
+        <a routerLink="/analyzer" routerLinkActive="active" class="nav-link">
+          <i class="bi bi-search"></i> Analyzer
+        </a>
+      </li>
+      <li>
+        <a routerLink="/about" routerLinkActive="active" class="nav-link">
+          <i class="bi bi-info-circle-fill"></i> About
+        </a>
+      </li>
+      <li>
+        <a routerLink="/team" routerLinkActive="active" class="nav-link">
+          <i class="bi bi-people-fill"></i> Team
+        </a>
+      </li>
+      <li>
+        <a routerLink="/pricing" routerLinkActive="active" class="nav-link">
+          <i class="bi bi-tag-fill"></i> Pricing
+        </a>
+      </li>
+      <li>
+        <a routerLink="/settings" routerLinkActive="active" class="nav-link">
+          <i class="bi bi-gear-fill"></i> Settings
+        </a>
+      </li>
+    </ul>
+
+    <!-- Right Side: user + logout -->
+    <div class="nav-right">
+      <a routerLink="/analyzer" class="btn-cta">
+        <i class="bi bi-lightning-charge-fill"></i> Analyze Now
+      </a>
+      <div class="user-menu">
+        <div class="user-avatar">
+          <i class="bi bi-person-fill"></i>
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ getCurrentUser()?.name || 'User' }}</span>
+          <span class="user-email">{{ getCurrentUser()?.email || '' }}</span>
+        </div>
+        <a routerLink="/settings" class="btn-icon" title="Settings">
+          <i class="bi bi-gear-fill"></i>
+        </a>
+        <button class="btn-logout" (click)="logout()" title="Logout">
+          <i class="bi bi-box-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<!-- Page Content -->
+<main [class.with-nav]="showNav">
+  <router-outlet></router-outlet>
+</main>

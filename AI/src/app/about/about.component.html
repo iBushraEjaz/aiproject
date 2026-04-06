@@ -1,0 +1,77 @@
+<div class="about-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-badge"><i class="bi bi-info-circle-fill"></i> About</div>
+    <h1>About <span>SEOGEN AI</span></h1>
+    <p>A final-year AI project built to detect propaganda in multilingual text using fine-tuned BERT.</p>
+  </div>
+
+  <!-- Stats Banner -->
+  <div class="stats-banner">
+    <div class="stat-pill" *ngFor="let s of stats">
+      <div class="sp-icon" [style.color]="s.color" [style.background]="s.bg">
+        <i class="bi" [class]="s.icon"></i>
+      </div>
+      <div>
+        <div class="sp-val" [style.color]="s.color">{{ s.val }}</div>
+        <div class="sp-lbl">{{ s.label }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mission -->
+  <div class="mission-card">
+    <div class="mission-icon"><i class="bi bi-shield-fill-check"></i></div>
+    <div class="mission-text">
+      <h3>Our Mission</h3>
+      <p>As misinformation spreads across the web, SEOGEN AI provides an intelligent tool to distinguish real content from propaganda — helping researchers, journalists, and everyday users make informed decisions about the information they consume.</p>
+    </div>
+  </div>
+
+  <!-- Capability Cards -->
+  <div class="section-label">
+    <div class="sl-line"></div>
+    <span><i class="bi bi-stars"></i> Capabilities</span>
+    <div class="sl-line"></div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="cap-card" *ngFor="let c of cards">
+      <div class="cap-icon" [style.color]="c.color" [style.background]="c.bg">
+        <i class="bi" [class]="c.icon"></i>
+      </div>
+      <h4>{{ c.title }}</h4>
+      <p>{{ c.desc }}</p>
+    </div>
+  </div>
+
+  <!-- Upcoming Features -->
+  <div class="section-label">
+    <div class="sl-line"></div>
+    <span><i class="bi bi-rocket-takeoff-fill"></i> Upcoming Features</span>
+    <div class="sl-line"></div>
+  </div>
+
+  <div class="cards-grid upcoming-grid">
+    <div class="cap-card" *ngFor="let f of upcomingFeatures">
+      <div class="cap-icon" [style.color]="f.color" [style.background]="f.bg">
+        <i class="bi" [class]="f.icon"></i>
+      </div>
+      <h4>{{ f.title }}</h4>
+      <p>{{ f.desc }}</p>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-strip">
+    <div class="cta-inner">
+      <h3>Ready to detect propaganda?</h3>
+      <p>Paste any text or URL and get an instant AI-powered assessment.</p>
+      <a routerLink="/analyzer" class="btn-cta">
+        <i class="bi bi-search"></i> Try the Analyzer
+      </a>
+    </div>
+  </div>
+
+</div>

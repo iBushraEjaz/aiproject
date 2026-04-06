@@ -1,0 +1,276 @@
+<div class="dashboard">
+
+  <!-- ===== HEADER ===== -->
+  <div class="dash-header">
+    <div class="header-left">
+      <div class="greeting-badge">
+        <span class="dot"></span> Live Dashboard
+      </div>
+      <h1>{{ greeting }}, <span>{{ currentUser?.name || 'Analyst' }}</span> 👋</h1>
+      <p>Here's your SEOGEN AI analysis overview for today.</p>
+    </div>
+    <div class="header-right">
+      <button class="btn-analyze" (click)="goToAnalyzer()">
+        <i class="bi bi-search"></i>
+        Analyze New URL
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== STAT CARDS ===== -->
+  <div class="stats-grid">
+
+    <div class="stat-card card-blue">
+      <div class="stat-top">
+        <div class="stat-icon-wrap blue">
+          <i class="bi bi-globe2"></i>
+        </div>
+        <span class="stat-trend up">
+          <i class="bi bi-arrow-up-short"></i> Active
+        </span>
+      </div>
+      <div class="stat-number">{{ totalAnalyzed }}</div>
+      <div class="stat-label">Total Sites Analyzed</div>
+      <div class="stat-bar">
+        <div class="stat-bar-fill blue-fill" [style.width.%]="100"></div>
+      </div>
+    </div>
+
+    <div class="stat-card card-green">
+      <div class="stat-top">
+        <div class="stat-icon-wrap green">
+          <i class="bi bi-shield-fill-check"></i>
+        </div>
+        <span class="stat-trend up">
+          <i class="bi bi-arrow-up-short"></i> Good
+        </span>
+      </div>
+      <div class="stat-number">{{ avgRealScore }}<span class="unit">%</span></div>
+      <div class="stat-label">Avg. Real Content Score</div>
+      <div class="stat-bar">
+        <div class="stat-bar-fill green-fill" [style.width.%]="avgRealScore"></div>
+      </div>
+    </div>
+
+    <div class="stat-card card-red">
+      <div class="stat-top">
+        <div class="stat-icon-wrap red">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+        <span class="stat-trend down">
+          <i class="bi bi-arrow-down-short"></i> Monitor
+        </span>
+      </div>
+      <div class="stat-number">{{ avgPropScore }}<span class="unit">%</span></div>
+      <div class="stat-label">Avg. Propaganda Score</div>
+      <div class="stat-bar">
+        <div class="stat-bar-fill red-fill" [style.width.%]="avgPropScore"></div>
+      </div>
+    </div>
+
+    <div class="stat-card card-amber">
+      <div class="stat-top">
+        <div class="stat-icon-wrap amber">
+          <i class="bi bi-star-fill"></i>
+        </div>
+        <span class="stat-trend up">
+          <i class="bi bi-arrow-up-short"></i> Score
+        </span>
+      </div>
+      <div class="stat-number">{{ avgTrustScore }}<span class="unit">%</span></div>
+      <div class="stat-label">Avg. Trust Score</div>
+      <div class="stat-bar">
+        <div class="stat-bar-fill amber-fill" [style.width.%]="avgTrustScore"></div>
+      </div>
+    </div>
+
+    <div class="stat-card card-cyan">
+      <div class="stat-top">
+        <div class="stat-icon-wrap cyan">
+          <i class="bi bi-calendar-check-fill"></i>
+        </div>
+        <span class="stat-trend up">
+          <i class="bi bi-arrow-up-short"></i> Today
+        </span>
+      </div>
+      <div class="stat-number">{{ todayCount }}</div>
+      <div class="stat-label">Analyzed Today</div>
+      <div class="stat-bar">
+        <div class="stat-bar-fill cyan-fill" [style.width.%]="100"></div>
+      </div>
+    </div>
+
+    <div class="stat-card card-rose">
+      <div class="stat-top">
+        <div class="stat-icon-wrap rose">
+          <i class="bi bi-shield-fill-x"></i>
+        </div>
+        <span class="stat-trend down">
+          <i class="bi bi-arrow-up-short"></i> Alert
+        </span>
+      </div>
+      <div class="stat-number">{{ highRiskCount }}</div>
+      <div class="stat-label">High Risk Sites Found</div>
+      <div class="stat-bar">
+        <div class="stat-bar-fill rose-fill" [style.width.%]="100"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== WELCOME BANNER ===== -->
+  <div class="welcome-banner">
+    <div class="wb-content">
+      <h2>Welcome to SEOGEN AI! 🚀</h2>
+      <p>Your intelligent companion for detecting propaganda and analyzing web content. Get started by pasting a URL or text in the Analyzer, or review your recent history below.</p>
+    </div>
+    <div class="wb-actions">
+      <button class="btn-wb" (click)="goToAnalyzer()">
+        <i class="bi bi-play-circle-fill"></i> Start Analyzing
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== BOTTOM SECTION ===== -->
+  <div class="bottom-grid">
+
+    <!-- Recent Analysis Table -->
+    <div class="panel recent-panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <i class="bi bi-clock-history"></i>
+          Recent Analyses
+        </div>
+        <a routerLink="/history" class="panel-link">View All →</a>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="recentItems.length === 0">
+        <div class="empty-icon"><i class="bi bi-search"></i></div>
+        <h3>No analyses yet</h3>
+        <p>Start by analyzing a website URL</p>
+        <button class="btn-start" (click)="goToAnalyzer()">
+          <i class="bi bi-search"></i> Start Analyzing
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap" *ngIf="recentItems.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>Website URL</th>
+              <th>Real %</th>
+              <th>Propaganda %</th>
+              <th>Trust</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of recentItems">
+              <td class="url-cell">
+                <i class="bi bi-globe2"></i>
+                <span>{{ item.url }}</span>
+              </td>
+              <td>
+                <div class="score-wrap">
+                  <div class="score-bar green-bar" [style.width.%]="item.realPercent"></div>
+                  <span class="score-val green-text">{{ item.realPercent }}%</span>
+                </div>
+              </td>
+              <td>
+                <div class="score-wrap">
+                  <div class="score-bar red-bar" [style.width.%]="item.propagandaPercent"></div>
+                  <span class="score-val red-text">{{ item.propagandaPercent }}%</span>
+                </div>
+              </td>
+              <td>
+                <span class="trust-badge" [style.color]="getScoreColor(item.trustScore)">
+                  {{ item.trustScore }}%
+                </span>
+              </td>
+              <td>
+                <span class="status-tag" [class]="getStatusClass(item.status)">
+                  {{ item.status }}
+                </span>
+              </td>
+              <td class="date-cell">{{ item.date }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Quick Analyze + Info Panel -->
+    <div class="side-panels">
+
+      <!-- Quick Analyze -->
+      <div class="panel quick-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <i class="bi bi-lightning-charge-fill"></i>
+            Quick Analyze
+          </div>
+        </div>
+        <div class="quick-body">
+          <p>Instantly analyze any website for credibility and propaganda signals.</p>
+          <div class="quick-input-wrap">
+            <i class="bi bi-link-45deg"></i>
+            <input
+              type="text"
+              [(ngModel)]="quickUrl"
+              placeholder="https://example.com"
+              class="quick-input"
+            />
+          </div>
+          <button class="btn-quick-analyze" (click)="goToAnalyzer()">
+            <i class="bi bi-search"></i> Analyze Now
+          </button>
+        </div>
+      </div>
+
+      <!-- How It Works -->
+      <div class="panel info-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <i class="bi bi-info-circle-fill"></i>
+            How It Works
+          </div>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-info">
+              <strong>Submit URL</strong>
+              <span>Paste any website link</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-info">
+              <strong>AI Analyzes</strong>
+              <span>Backlinks, content & trust signals</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-info">
+              <strong>Get Score</strong>
+              <span>Real vs propaganda percentage</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-info">
+              <strong>View Report</strong>
+              <span>Detailed breakdown & insights</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
