@@ -30,14 +30,14 @@ def clean_text(text: str) -> str:
     # 2. Strip HTML tags
     text = re.sub(r"<[^>]+>", " ", text)
 
-    # 3. Lowercase
-    text = text.lower()
+    # 3. Lowercase only ASCII (preserve Arabic/multilingual chars)
+    text = re.sub(r'[a-zA-Z]+', lambda m: m.group().lower(), text)
 
     # 4. Remove URLs
     text = re.sub(r"https?://\S+|www\.\S+", " ", text)
 
-    # 5. Remove non‑alphanumeric characters (keep spaces)
-    text = re.sub(r"[^a-z0-9\s]", " ", text)
+    # 5. Remove non‑alphanumeric characters (keep spaces + unicode letters for multilingual)
+    text = re.sub(r"[^\w\s]", " ", text, flags=re.UNICODE)
 
     # 6. Collapse whitespace
     text = re.sub(r"\s+", " ", text)

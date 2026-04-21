@@ -79,7 +79,7 @@ export class AnalyzerComponent {
         clearInterval(interval);
         this.progress.set(0);
         this.isAnalyzing.set(false);
-        this.errorMsg = 'Analysis failed. Please check that the backend API is running.';
+        this.errorMsg = err?.message || 'Analysis failed. Please check that the backend API is running.';
         console.error(err);
       },
     });
@@ -121,5 +121,22 @@ export class AnalyzerComponent {
     if (score >= 50) return '#f59e0b';
     if (score >= 30) return '#ef4444';
     return '#dc2626';
+  }
+
+  getTechniqueKeys(): string[] {
+    const t = this.result()?.detectedTechniques;
+    return t ? Object.keys(t) : [];
+  }
+
+  getTechniqueColor(technique: string): string {
+    const colors: Record<string, string> = {
+      'Loaded Language':        '#ef4444',
+      'Fear Appeal':            '#f97316',
+      'Us vs Them':             '#a855f7',
+      'Discrediting Media':     '#3b82f6',
+      'Emotional Manipulation': '#ec4899',
+      'Call to Action':         '#f59e0b',
+    };
+    return colors[technique] ?? '#94a3b8';
   }
 }

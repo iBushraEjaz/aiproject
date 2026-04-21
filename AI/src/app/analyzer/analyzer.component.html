@@ -258,6 +258,33 @@
               <span>Social signals cross-referenced</span>
             </li>
           </ul>
+
+          <!-- Propaganda Techniques -->
+          <div *ngIf="getTechniqueKeys().length > 0" style="margin-top: 14px;">
+            <div style="font-size:13px; font-weight:600; color:#ef4444; margin-bottom:10px;">
+              <i class="bi bi-flag-fill"></i> Propaganda Techniques Detected
+            </div>
+            <div *ngFor="let technique of getTechniqueKeys()" style="margin-bottom:10px;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
+                <span [style.background]="'rgba(0,0,0,0.2)'" [style.color]="getTechniqueColor(technique)"
+                  style="padding:2px 10px; border-radius:12px; font-size:12px; font-weight:600; border:1px solid currentColor;">
+                  {{ technique }}
+                </span>
+              </div>
+              <div style="display:flex; flex-wrap:wrap; gap:5px; padding-left:8px;">
+                <span *ngFor="let phrase of result()!.detectedTechniques[technique]"
+                  style="background:rgba(239,68,68,0.08); color:#fca5a5; border:1px solid rgba(239,68,68,0.2);
+                         padding:2px 8px; border-radius:8px; font-size:11px;">
+                  "{{ phrase }}"
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="getTechniqueKeys().length === 0 && result()!.propagandaPercent > 0"
+            style="margin-top:14px; font-size:12px; color:#94a3b8;">
+            <i class="bi bi-info-circle"></i> No specific signal words found — propaganda score is based on writing style and sentence patterns detected by the AI model.
+          </div>
         </div>
       </div>
 
@@ -276,31 +303,45 @@
           <div class="verdict-label" [style.color]="getStatusColor(result()!.status)">
             {{ result()!.status === 'Real' ? 'Credible Source' : result()!.status === 'Propaganda' ? 'Propaganda Detected' : 'Mixed Signals' }}
           </div>
-          <p class="verdict-desc">
-            <ng-container *ngIf="result()!.status === 'Real'">
-              This website shows strong credibility signals. Content appears reliable and trustworthy based on our analysis.
-            </ng-container>
-            <ng-container *ngIf="result()!.status === 'Propaganda'">
-              This website shows significant propaganda signals. Exercise caution when referencing content from this source.
-            </ng-container>
-            <ng-container *ngIf="result()!.status === 'Mixed'">
-              This website shows mixed credibility signals. Some content may be reliable while other content requires verification.
-            </ng-container>
+          <p class="verdict-desc" *ngIf="result()!.verdict">
+            {{ result()!.verdict }}
+          </p>
+          <p class="verdict-desc" *ngIf="!result()!.verdict">
+            <ng-container *ngIf="result()!.status === 'Real'">This website shows strong credibility signals.</ng-container>
+            <ng-container *ngIf="result()!.status === 'Propaganda'">This website shows significant propaganda signals. Exercise caution.</ng-container>
+            <ng-container *ngIf="result()!.status === 'Mixed'">This website shows mixed credibility signals. Verify before sharing.</ng-container>
           </p>
           <div class="verdict-scores">
             <div class="vs-item">
-              <span class="vs-label">Real</span>
-              <div class="vs-bar">
-                <div class="vs-fill vs-green" [style.width.%]="result()!.realPercent"></div>
-              </div>
+              <span class="vs-label">Credible</span>
+              <div class="vs-bar"><div class="vs-fill vs-green" [style.width.%]="result()!.realPercent"></div></div>
               <span class="vs-num">{{ result()!.realPercent }}%</span>
             </div>
             <div class="vs-item">
               <span class="vs-label">Propaganda</span>
-              <div class="vs-bar">
-                <div class="vs-fill vs-red" [style.width.%]="result()!.propagandaPercent"></div>
-              </div>
+              <div class="vs-bar"><div class="vs-fill vs-red" [style.width.%]="result()!.propagandaPercent"></div></div>
               <span class="vs-num">{{ result()!.propagandaPercent }}%</span>
+            </div>
+          </div>
+
+          <!-- Network breakdown (shown only when backlink data available) -->
+          <div *ngIf="result()!.backlinkCount > 0" style="margin-top:16px; border-top:1px solid rgba(255,255,255,0.1); padding-top:14px;">
+            <div style="font-size:13px; font-weight:600; margin-bottom:10px;">
+              <i class="bi bi-diagram-3-fill"></i> Network Analysis ({{ result()!.backlinkCount }} backlinks)
+            </div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; font-size:12px;">
+              <span style="color:#ef4444"><i class="bi bi-x-circle-fill"></i> {{ result()!.propagandaSources }} propaganda sources</span>
+              <span style="color:#22c55e"><i class="bi bi-check-circle-fill"></i> {{ result()!.credibleSources }} credible sources</span>
+              <span *ngIf="result()!.darkWebLinks > 0" style="color:#f59e0b"><i class="bi bi-exclamation-triangle-fill"></i> {{ result()!.darkWebLinks }} dark web links</span>
+            </div>
+            <div *ngIf="result()!.propagandaReferringDomains.length > 0" style="margin-top:10px;">
+              <div style="font-size:11px; color:#94a3b8; margin-bottom:6px;">Propaganda-linked domains:</div>
+              <div style="display:flex; flex-wrap:wrap; gap:4px;">
+                <span *ngFor="let d of result()!.propagandaReferringDomains"
+                  style="background:rgba(239,68,68,0.12); color:#ef4444; border:1px solid rgba(239,68,68,0.3); padding:2px 8px; border-radius:12px; font-size:11px;">
+                  {{ d }}
+                </span>
+              </div>
             </div>
           </div>
         </div>

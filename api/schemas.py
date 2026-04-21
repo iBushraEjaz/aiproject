@@ -17,13 +17,12 @@ class AnalyzeRequest(BaseModel):
 
 class AnalyzeResponse(BaseModel):
     """Response body for single text analysis."""
-    label: str = Field(..., description="Predicted label: 'propaganda' or 'non-propaganda'.")
-    label_id: int = Field(..., description="Numeric label ID (0 = non-propaganda, 1 = propaganda).")
-    confidence: float = Field(..., ge=0.0, le=1.0, description="Confidence score for the predicted label.")
-    probabilities: dict[str, float] = Field(
-        ...,
-        description="Softmax probabilities for each class.",
-    )
+    label: str
+    label_id: int
+    confidence: float = Field(..., ge=0.0, le=1.0)
+    probabilities: dict[str, float]
+    flagged_phrases: list[str] = Field(default=[])
+    detected_techniques: dict[str, list[str]] = Field(default={}, description="Propaganda techniques detected, mapped to example phrases.")
 
 
 class BatchAnalyzeRequest(BaseModel):
@@ -59,3 +58,23 @@ class FetchUrlResponse(BaseModel):
     url: str
     text: str
     title: str
+
+
+class BacklinkRequest(BaseModel):
+    """Request body for backlink analysis."""
+    url: str = Field(..., description="The URL or domain to analyze backlinks for.")
+
+
+class BacklinkResponse(BaseModel):
+    """Response body for backlink network analysis."""
+    total_backlinks: int
+    unique_referring_domains: int
+    propaganda_sources: int
+    credible_sources: int
+    unknown_sources: int
+    dark_web_links: int
+    nofollow_ratio: float
+    top_referring_domains: list[str]
+    propaganda_referring_domains: list[str]
+    credible_referring_domains: list[str]
+    network_propaganda_score: float
